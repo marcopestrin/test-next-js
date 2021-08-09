@@ -1,2 +1,8 @@
-# test-next-js
-just a simple test
+## Getting Started
+
+First, run the development server:
+
+```bash
+npm install
+npm run dev
+```
