@@ -1,12 +1,13 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from 'next/router'
-import { ListItemText, ListItem, List } from '@material-ui/core/';
+import { ListItemText, ListItem, List, CircularProgress, Typography } from '@material-ui/core/';
 import { getUserById } from "../../helpers/requests";
 
 const DetailsUser = () => {
 
     const [ detailsUser, setDetailsUser ] = useState({});
+    const [ spinner, setSpinner ] = useState(true);
     const router = useRouter();
 
     useEffect(( ) => {
@@ -17,37 +18,42 @@ const DetailsUser = () => {
     }, [router.query]);
 
     const fetchData = async(id) => {
+        setSpinner(true);
         const { code, meta, data } = await getUserById(id);
         if (code == 200) {
             setDetailsUser(data);
+            setSpinner(false);
         }
     }
 
-    useEffect(() => {
-        console.log(detailsUser);
-    }, [detailsUser])
-
     return (
         <>
-        { detailsUser && 
-            <List>
-                <ListItem divider>
-                    <ListItemText primary="Identifier" secondary={detailsUser.id} />
-                </ListItem>
-                <ListItem divider>
-                    <ListItemText primary="Status" secondary={detailsUser.status} />
-                </ListItem>
-                <ListItem divider>
-                    <ListItemText primary="Name" secondary={detailsUser.name} />
-                </ListItem>
-                <ListItem divider>
-                    <ListItemText primary="Email address" secondary={detailsUser.email} />
-                </ListItem>
-                <ListItem divider>
-                    <ListItemText primary="Gender" secondary={detailsUser.gender} />
-                </ListItem>
-            </List>
-        }
+            { spinner ? <>
+                <div style={{"textAlign": "center", "marginTop": "30px"}}>
+                    <CircularProgress />
+                    <Typography>Loading...</Typography>
+                </div>
+            </> : <> 
+                { detailsUser && 
+                    <List>
+                        <ListItem divider>
+                            <ListItemText primary="Identifier" secondary={detailsUser.id} />
+                        </ListItem>
+                        <ListItem divider>
+                            <ListItemText primary="Status" secondary={detailsUser.status} />
+                        </ListItem>
+                        <ListItem divider>
+                            <ListItemText primary="Name" secondary={detailsUser.name} />
+                        </ListItem>
+                        <ListItem divider>
+                            <ListItemText primary="Email address" secondary={detailsUser.email} />
+                        </ListItem>
+                        <ListItem divider>
+                            <ListItemText primary="Gender" secondary={detailsUser.gender} />
+                        </ListItem>
+                    </List>
+                }
+            </> }
         </>
     )
 }

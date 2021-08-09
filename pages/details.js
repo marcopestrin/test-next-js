@@ -4,9 +4,11 @@ import DetailsUser from "../components/detailsUser";
 
 export default function Details() {
     return (
-        <Container maxWidth="md">
+        <>
             <Header />
-            <DetailsUser />
-        </Container>
+            <Container maxWidth="md">
+                <DetailsUser />
+            </Container>
+        </>
     )
 }

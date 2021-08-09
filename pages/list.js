@@ -4,9 +4,11 @@ import Header from "../components/header";
 
 export default function List() {
     return (
-        <Container maxWidth="md">
+        <>
             <Header />
-            <UserList />
-        </Container>
+            <Container maxWidth="md">
+                <UserList />
+            </Container>
+        </>
     )
 }
