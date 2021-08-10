@@ -2,8 +2,8 @@
 Progetto da sviluppare con Next.js.
 Occorre sviluppare 2 pagine: 
 
-	•   una pagina dove vengano elencate, tramite paginazione, tutti gli utenti di una determinata piattaforma (con la possibilità di cercare per nome);
-	•	una pagina dove visualizzare lo user selezionato. Deve essere possibile navigare alla pagina precedente e scegliere un altro user.
+- una pagina dove vengano elencate, tramite paginazione, tutti gli utenti di una determinata piattaforma (con la possibilità di cercare per nome);
+- una pagina dove visualizzare lo user selezionato. Deve essere possibile navigare alla pagina precedente e scegliere un altro user.
 
 Feature 1 - Index User
 Endpoint: GET - https://gorest.co.in/public-api/users Per paginare aggiungere parametro “page”, esempio: https://gorest.co.in/public-api/users?page=3
