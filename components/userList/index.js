@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Router from 'next/router'
 import { TableHead, Table, TableRow, TableBody, TableCell, TableContainer, TablePagination, TextField, Typography, Grid, CircularProgress } from "@material-ui/core";
-import { withStyles } from '@material-ui/core/styles';
 import CheckIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
 import { getUsers } from "../../helpers/requests";
+import { StyledTableCell, StyledTableRow } from "./styledTable";
 import Loading from "../loading";
 
 const UserList = () => {
@@ -20,9 +20,7 @@ const UserList = () => {
 
     useEffect(() => fetchData(stringFilter, currentPage), [ currentPage ]);
 
-    const handleChangePage = (event, newPage) => {
-        setCurrentPage(newPage);
-    };
+    const handleChangePage = (event, newPage) => setCurrentPage(newPage);
 
     const handleClickRow = (id) => {
         return Router.push({
@@ -56,31 +54,11 @@ const UserList = () => {
         setStringFilter(value);
         clearTimeout(timeout);
         timeout = setTimeout(function(){
-            setCurrentPage(1);
+            setCurrentPage(0);
             getFilteredData(value, 1);
         }, 500);
     };
 
-    const StyledTableRow = withStyles((theme) => ({
-        root: {
-          "&:hover": {
-            backgroundColor: theme.palette.action.hover,
-            cursor: "pointer"
-          }
-        },
-      }))(TableRow);
-
-    const StyledTableCell = withStyles((theme) => ({
-        head: {
-            backgroundColor: theme.palette.common.black,
-            color: theme.palette.common.white,
-        },
-        root: {
-            fontSize: 16,
-            textTransform: "uppercase"
-        }
-    }))(TableCell);
-      
     return (
         <>
             { spinner ? <Loading /> : <>
@@ -131,17 +109,17 @@ const UserList = () => {
                                     </TableContainer>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <Typography align="right">Page {currentPage +1} of {pagination.pages} </Typography>
+                                    <Typography align="right">Page {currentPage +1 } of {pagination.pages} </Typography>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <TablePagination
+                                    {currentPage +1 && <TablePagination
                                         rowsPerPageOptions={[20]}   
                                         component="div"
                                         count={pagination?.total ? pagination.total : 1 }
                                         rowsPerPage={20}
                                         page={currentPage}
                                         onPageChange={handleChangePage}
-                                    />
+                                    /> }
                                 </Grid>
                             </> : <Typography>No Results</Typography> }
                         </Grid> 
