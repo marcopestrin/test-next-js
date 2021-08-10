@@ -1,21 +1,18 @@
 import Link from 'next/link'
 import { AppBar, Toolbar, Grid } from "@material-ui/core";
 import { useRouter } from 'next/router'
-import { makeStyles } from '@material-ui/core/styles';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-      flexGrow: 1,
-    }
-}));
-
-export default function Header() {
-    const classes = useStyles();
+const Header = () => {
     const router = useRouter();
 
+    const customStyle = {
+        "flexGrow": "1",
+        "marginBottom": "20px"
+    };
+    
     return (
-        <div className={classes.root}>
+        <div style={customStyle}>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <AppBar position="static">
@@ -32,3 +29,5 @@ export default function Header() {
         </div>
     )
 }
+
+export default Header

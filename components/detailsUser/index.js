@@ -1,8 +1,9 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from 'next/router'
-import { ListItemText, ListItem, List, CircularProgress, Typography } from '@material-ui/core/';
+import { ListItemText, ListItem, List, Typography } from '@material-ui/core/';
 import { getUserById } from "../../helpers/requests";
+import Loading from "../loading";
 
 const DetailsUser = () => {
 
@@ -28,13 +29,8 @@ const DetailsUser = () => {
 
     return (
         <>
-            { spinner ? <>
-                <div style={{"textAlign": "center", "marginTop": "30px"}}>
-                    <CircularProgress />
-                    <Typography>Loading...</Typography>
-                </div>
-            </> : <> 
-                { detailsUser && 
+            { spinner ? <Loading /> : <> 
+                { detailsUser ? 
                     <List>
                         <ListItem divider>
                             <ListItemText primary="Identifier" secondary={detailsUser.id} />
@@ -52,7 +48,7 @@ const DetailsUser = () => {
                             <ListItemText primary="Gender" secondary={detailsUser.gender} />
                         </ListItem>
                     </List>
-                }
+                : <Typography> No Result </Typography> }
             </> }
         </>
     )
