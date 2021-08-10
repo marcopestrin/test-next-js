@@ -4,22 +4,26 @@ import { TableHead, Table, TableRow, TableBody, TableCell, TableContainer, Table
 import { withStyles } from '@material-ui/core/styles';
 import CheckIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
-import { getUsers, getFilteredUsers } from "../../helpers/requests";
+import { getUsers } from "../../helpers/requests";
 import Loading from "../loading";
 
 const UserList = () => {
 
     const [ users, setUsers ] = useState([  ]);
     const [ pagination, setPagination ] = useState({});
-    const [ currentPage, setCurrentPage ] = useState(1);
-    const [ filter, setFilter ] = useState(false);
+    const [ currentPage, setCurrentPage ] = useState(0);
     const [ spinner, setSpinner ] = useState(true);
+    const [ stringFilter, setStringFilter ] = useState("");
     const [ spinnerSearch, setSpinnerSearch ] = useState(false);
     const columns = ["Id", "Status", "Name", "Email", "Gender"];
     let timeout;
 
-    useEffect(() => fetchData(currentPage), [ currentPage ]);
-    const handleChangePage = (event, newPage) => setCurrentPage(newPage);
+    useEffect(() => fetchData(stringFilter, currentPage), [ currentPage ]);
+
+    const handleChangePage = (event, newPage) => {
+        setCurrentPage(newPage);
+    };
+
     const handleClickRow = (id) => {
         return Router.push({
             pathname: '/details',
@@ -27,9 +31,9 @@ const UserList = () => {
         });
     };
 
-    const fetchData = async(page) => {
+    const fetchData = async(name, page) => {
         setSpinner(true);
-        const { code, meta, data } = await getUsers(page);
+        const { code, meta, data } = await getUsers(name, page);
         if (code === 200) {
             setUsers(data);
             setPagination(meta.pagination);
@@ -37,9 +41,9 @@ const UserList = () => {
         }
     };
 
-    const getFilteredData = async(name) => {
+    const getFilteredData = async(name, page) => {
         setSpinnerSearch(true);
-        const { code, meta, data } = await getFilteredUsers(name);
+        const { code, meta, data } = await getUsers(name, page);
         if (code === 200) {
             setUsers(data);
             setPagination(meta.pagination);
@@ -49,18 +53,20 @@ const UserList = () => {
 
     const handleSearch = (event) => {
         const { value } = event.target
+        setStringFilter(value);
         clearTimeout(timeout);
         timeout = setTimeout(function(){
-            getFilteredData(value);
-            setFilter(value !== ""); 
+            setCurrentPage(1);
+            getFilteredData(value, 1);
         }, 500);
     };
 
     const StyledTableRow = withStyles((theme) => ({
         root: {
-          '&:nth-of-type(odd)': {
+          "&:hover": {
             backgroundColor: theme.palette.action.hover,
-          },
+            cursor: "pointer"
+          }
         },
       }))(TableRow);
 
@@ -83,6 +89,7 @@ const UserList = () => {
                         <TextField
                             id="search-field"
                             fullWidth
+                            value={stringFilter}
                             label="Search by name"
                             variant="outlined"
                             onChange={handleSearch}
@@ -109,6 +116,7 @@ const UserList = () => {
                                                         <StyledTableRow
                                                             key={index}
                                                             onClick={() => handleClickRow(user.id)}
+                                                            hover={true}
                                                         >
                                                             <TableCell>{user.id}</TableCell>
                                                             <TableCell>{user.status === "active" ? <CheckIcon color="primary" fontSize="large" /> : <ClearIcon color="error" fontSize="large" />}</TableCell>
@@ -123,15 +131,15 @@ const UserList = () => {
                                     </TableContainer>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    { !filter && <Typography align="right">Page {currentPage} of {pagination.pages} </Typography> }
+                                    <Typography align="right">Page {currentPage +1} of {pagination.pages} </Typography>
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TablePagination
                                         rowsPerPageOptions={[20]}   
                                         component="div"
                                         count={pagination?.total ? pagination.total : 1 }
-                                        rowsPerPage={10}
-                                        page={currentPage ? currentPage : 1 }
+                                        rowsPerPage={20}
+                                        page={currentPage}
                                         onPageChange={handleChangePage}
                                     />
                                 </Grid>

@@ -1,11 +1,6 @@
 
-export async function getUsers(page) {
-    const response = await fetch(`https://gorest.co.in/public-api/users?page=${page}`);
-    return await response.json();
-}
-
-export async function getFilteredUsers(name) {
-    const response = await fetch(`https://gorest.co.in/public-api/users?name=${name}`);
+export async function getUsers(name, page) {
+    const response = await fetch(`https://gorest.co.in/public-api/users?name=${name}&page=${page +1}`);
     return await response.json();
 }
 
